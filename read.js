@@ -15,17 +15,18 @@ function addElements(divName, data) {
 }
 
 //Search up to 100 links, counts them, and shows them in a popup
-function buildHistoryList() {
+function buildHistoryList() {				//REMINDER: ADD BACK ELEMENT PARAMETER
 	//Look for history items in the last 24 hours
 	var microsecondsPerDay = 1000 * 60 * 60 * 24;
 	var oneDayAgo = (new Date()).getTime() - microsecondsPerDay;
-	
-	var historyStore = [];
-
-	var historiesprocessed = 0;
+	//Array that stores url and visitCounts
 	var histories = [];
 
-	chrome.history.search({text:'', maxResults:0, startTime: oneDayAgo}, function(historyItems) {
+	chrome.history.search({
+		text:'',				//Captures all links
+		maxResults:0,			//No max
+		startTime: oneDayAgo
+		}, function(historyItems) {
 		for (var i = 0; i < historyItems.length; i++) {
 			histories.push({
 				url: historyItems[i].url,
