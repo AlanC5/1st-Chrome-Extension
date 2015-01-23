@@ -1,3 +1,4 @@
+/* Implement Later
 function addElements(divName, data) {
 	var element = document.getElementById(divName);
 
@@ -12,7 +13,7 @@ function addElements(divName, data) {
 		li.appendChild(d);
 		ol.appendChild(li);
 	}
-}
+} */
 
 //Search up to 100 links, counts them, and shows them in a popup
 function buildHistoryList() {				//REMINDER: ADD BACK ELEMENT PARAMETER
@@ -24,7 +25,7 @@ function buildHistoryList() {				//REMINDER: ADD BACK ELEMENT PARAMETER
 
 	chrome.history.search({
 		text:'',				//Captures all links
-		maxResults:0,			//No max
+		maxResults:10,			//No max
 		startTime: oneDayAgo
 		}, function(historyItems) {
 		for (var i = 0; i < historyItems.length; i++) {
@@ -33,6 +34,7 @@ function buildHistoryList() {				//REMINDER: ADD BACK ELEMENT PARAMETER
 				visits: historyItems[i].visitCount
 			});
 			console.log(historyItems[i].url);
+			console.log(historyItems[i].visitCount);
 		}
 	});
 }
