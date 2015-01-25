@@ -1,16 +1,38 @@
 //RUN USING NODE
 
+var port = 8000;			//CHANGED PORT
+	var http = require('http');
+	var server = http.createServer();
+	server.on('request', request);
+	server.listen(port);
+	function request (request, response) {
+		var store = '';
+		request.on('data', function(data)
+		{
+			
+			store += data;
+		});
+		request.on('end',function()
+		{
+			console.log(store);
+			response.setHeader("Content-Type", "text/json");
+			response.setHeader("Access-Control-Allow-Origin", "*");
+			response.end(store);
+			Enter_data(store);
+		});
+	}
 
+Enter_data = function(data) {
 var mysql = require('mysql');
 var client = mysql.createConnection({
 	host		: 'localhost',
 	user		: 'Alan',
 	password	: '12345'
 });
-/*Testing if mysql can take arrays, it works
-var string = ['jack', 'apples', "pillow", "Couch", "house"];
+//Testing if mysql can take arrays, it works
+var string = [];
 var num = [23,5,2,20,8];
-*/
+string.push(data);
 
 check_Error = function(type, error) {
 	if (error) {
@@ -76,51 +98,12 @@ clearTable = function (client) {
 insertTable = function (client) {
 	var insert = 'INSERT INTO History (URL, Visits) VALUES ?';
 	var values =  [];
-	/*for (var i = 0, lens = string.length; i < lens; ++i) {
+	for (var i = 0, lens = string.length; i < lens; ++i) {
 		var hold = [];
 		hold.push(string[i],num[i]);
-		values.push(hold); 
-	}*/
-
-	var port = 7000;
-	var http = require('http');
-	var server = http.createServer();
-	server.on('request', request);
-	server.listen(port);
-	function request (request, response) {
-		var store = '';
-		var hold = [];
-		request.on('data', function(data)
-		{
-			
-			store += data;
-			hold.push('ok', 4);
-			values.push(hold);
-		});
-		request.on('end',function()
-		{
-			console.log(store);
-			response.setHeader("Content-Type", "text/json");
-			response.setHeader("Access-Control-Allow-Origin", "*");
-			response.end(store);
-		});
-		server.end();
+		values.push(hold);
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	
 	client.query(insert, [values], function (err, results) {
 			check_Error('insertTable', err);
 			console.dir(results);
@@ -142,6 +125,8 @@ tableHasData = function (client) {
 		}
 	);
 };
+
+}
 
 
 
