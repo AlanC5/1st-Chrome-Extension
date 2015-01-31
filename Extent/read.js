@@ -29,7 +29,7 @@ function buildHistoryList() {				//REMINDER: ADD BACK ELEMENT PARAMETER
 
 	chrome.history.search({
 		text:'',				//Captures all links
-		maxResults:1,			//No max
+		maxResults:2,			//No max
 		startTime: oneDayAgo
 		}, function(historyItems) {
 		for (var i = 0; i < historyItems.length; i++) {
@@ -40,15 +40,13 @@ function buildHistoryList() {				//REMINDER: ADD BACK ELEMENT PARAMETER
 			console.log(historyItems[i].url);
 			//console.log(historyItems[i].visitCount);
 			//Send information to port using AJAX and JQUERY
-			$.ajax ({
+		}
+		$.ajax ({
 				type: "POST",
 				url: "http://localhost:8000",
-				crossDomain: true,
 				dataType: "json",
-				data:JSON.stringify(historyItems[i].url)
-			}).done(function (data) {alert("FINISHED");
-				});
-		}
+				data:JSON.stringify(histories[0])
+			})
 	});
 }
 

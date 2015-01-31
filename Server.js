@@ -1,26 +1,44 @@
 //RUN USING NODE
-
+/*
 var port = 8000;			//CHANGED PORT
 	var http = require('http');
 	var server = http.createServer();
 	server.on('request', request);
 	server.listen(port);
 	function request (request, response) {
-		var store = '';
+		var store = [];
+		var check = '';
 		request.on('data', function(data)
 		{
-			
-			store += data;
+			check += data;
+			store.push(data);
 		});
 		request.on('end',function()
 		{
-			console.log(store);
 			response.setHeader("Content-Type", "text/json");
 			response.setHeader("Access-Control-Allow-Origin", "*");
-			response.end(store);
+			response.end(check);
 			Enter_data(store);
 		});
 	}
+*/
+
+var http = require('http');
+var server = http.createServer();
+server.listen(8000);
+server.on('request', function(request, response) {
+	var store = [];
+	request.on('data', function(rec_data) {		//listening for data event -- do something with rec_data, received data
+		store.push(rec_data);
+	});
+	request.on('end', function() {		//listening for end event, when client is done sending data
+		//Allow Chrome Extension access to server, notice it allows all access so its most likely a security issue
+		response.setHeader("Access-Control-Allow-Origin", "*");
+		response.end();					//end listening on server side
+		Enter_data(store);
+	});
+});
+
 
 Enter_data = function(data) {
 var mysql = require('mysql');
@@ -30,9 +48,9 @@ var client = mysql.createConnection({
 	password	: '12345'
 });
 //Testing if mysql can take arrays, it works
-var string = [];
+//var string = [];
 var num = [23,5,2,20,8];
-string.push(data);
+//string.push(data);
 
 check_Error = function(type, error) {
 	if (error) {
@@ -98,9 +116,9 @@ clearTable = function (client) {
 insertTable = function (client) {
 	var insert = 'INSERT INTO History (URL, Visits) VALUES ?';
 	var values =  [];
-	for (var i = 0, lens = string.length; i < lens; ++i) {
+	for (var i = 0, lens = data.length; i < lens; ++i) {
 		var hold = [];
-		hold.push(string[i],num[i]);
+		hold.push(data[i],num[i]);
 		values.push(hold);
 	}
 	
